@@ -14,3 +14,10 @@ recap the process for level 5.
 3.plugin passport-local-mongoose
 
 4.passport create stratgey.. serialize..deseriaize(local login setup)
+
+level 6... connect with google login oAuth
+did use the npm of passport-google-oauth20. mongoose-findorcreate
+create google developer console
+passport authenicate
+add googleid to the schema
+seralize and desearlize
