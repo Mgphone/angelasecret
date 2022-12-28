@@ -7,6 +7,7 @@ const session=require("express-session");
 const passport=require("passport");
 const passportLocalMongoose=require("passport-local-mongoose");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy=require("passport-facebook").Strategy;
 const findOrCreate = require('mongoose-findorcreate');
 const app=express();
 const mongoose=require("mongoose");
@@ -34,7 +35,8 @@ mongoose.connect("mongodb+srv://mgphone:mgphone@cluster0.ccftyls.mongodb.net/use
 const userSchema=new mongoose.Schema({
   email:String,
   password:String,
-  googleId:String
+  googleId:String,
+  facebookId:String
 });
 userSchema.plugin(findOrCreate);
 userSchema.plugin(passportLocalMongoose);
@@ -53,13 +55,15 @@ User.findById(id, function(err, user) {
   done(err, user);
 });
 });
+
+//////////////googlestrategy//////////////
 passport.use(new GoogleStrategy({
   clientID: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
   callbackURL: "http://localhost:3000/auth/google/secrets"
 },
 function(accessToken, refreshToken, profile, cb) {
-  console.log(profile);
+  // console.log(profile);
   User.findOrCreate({ googleId: profile.id }, function (err, user) {
     return cb(err, user);
   });
@@ -79,6 +83,29 @@ app.get('/auth/google/secrets',
     res.redirect('/secrets');
 });  
 
+
+//////////////facebook strategy//////
+passport.use(new FacebookStrategy({
+  clientID: process.env.FBAPP_ID,
+  clientSecret: process.env.FBAPP_SECRET,
+  callbackURL: "http://localhost:3000/auth/facebook/secrets"
+},
+function(accessToken, refreshToken, profile, cb) {
+  console.log(profile);
+  User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+    return cb(err, user);
+  });
+}
+));
+app.get('/auth/facebook',
+  passport.authenticate('facebook'));
+
+app.get('/auth/facebook/secrets',
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/secrets');
+  });
   
 
 app.get("/login",function(req,res){

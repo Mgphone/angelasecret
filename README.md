@@ -21,3 +21,13 @@ create google developer console
 passport authenicate
 add googleid to the schema
 seralize and desearlize
+
+facebook add ons..
+need to use 2 npms. first is for passport but this has been used in google npm.second is passport-facebook
+1.require passport-facebook. 
+2.add facebookId in schema (don't wanna duplicate facebookID)
+3.add appID and appSecret in env
+4.facebook strategy
+5.use two ejs path.. .get auth/facebook and auth/facebook/secrets
+
+
