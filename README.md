@@ -30,4 +30,10 @@ need to use 2 npms. first is for passport but this has been used in google npm.s
 4.facebook strategy
 5.use two ejs path.. .get auth/facebook and auth/facebook/secrets
 
-
+adding secrets function
+1.add secret to the schema
+2.use route get /submit
+3.user rout post /submit use schema model findbyID with body.secret
+4.change little bit in /secret with User.find() coz passport got all user req(callback) value.
+5.prep for ejs secrets..render user value to ejs secrets
+6.using foreEach with EJS database value.
